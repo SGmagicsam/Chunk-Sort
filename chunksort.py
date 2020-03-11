@@ -1,21 +1,29 @@
 from timeit import default_timer as timer
 import numpy as np
+import bisect
 
 def findIndex(arr, value, index):
-
-    left = arr[index - 1] < value
+    '''
+    left = arr[index - 1] <= value
     right = arr[index] >= value
-    #basecase: if the index reaches 0, we insert it in position 1
-    print(f"Index: {index}, {value} belongs in {arr}")
+    print(f"{value} belongs at position {index} in {arr}")
+    print(left, right)
+    #edgecase: index's outside range of list
+    if(index >= len(arr)):
+        index = len(arr) - 2
     #basecase: we've got the right index
     if(left and right):
         return index
+    #if left condition is not met we check the left side
     elif(not left):
-        return findIndex(arr, value, index//2 + index)
-    else:
         return findIndex(arr, value, index//2)
-
-
+    #if the right condition is not met we check the right
+    elif(not right):
+        return findIndex(arr, value, index//2 + index)
+    '''
+    #ran into recursion limit issues with my above method(which shouldnt be happening so while i work on that..)
+    #bisect does what my code will eventually do
+    return bisect.bisect(arr, value)
 
 def addToChunk(chunk, value):
 
@@ -53,9 +61,7 @@ def main():
     #converting them back into lists so I dont have to rewrite a bunch of the code
     #using an np.array() would be alot more efficient than python list
     #test = list(np.random.random(size))
-    test = []
-    for i in range(size):
-        test.append(size - i)
+    test = list(np.random.randint(0, 2**31, size))
     test_two = test.copy()
     #timing pythons .sort method { timsort}
     sort_start = timer()
