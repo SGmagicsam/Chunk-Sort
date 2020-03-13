@@ -21,9 +21,11 @@ def findIndex(arr, value):
             low = index
     '''
     #bisect is still slightly faster than my function so im using it
+    #Worst Case: O(log (n))
     return bisect.bisect(arr, value)
 
 def addToChunk(chunk, value):
+    # Worst Case: O(log (n))
 
     #base cases: 
     #when value is greater than the largest value in the chunk
@@ -36,9 +38,11 @@ def addToChunk(chunk, value):
         #initally check the middle of the list
         chunk.insert(findIndex(chunk, value), value)
 
+
 def parition(arr):
 
-
+    #Worst case: 7 log(n) I used a counter and the number of paritions never surpassed 42
+    #when I chose an list size 1 million
     pivot = arr[len(arr)//2]
     left = []
     right = []
@@ -53,11 +57,14 @@ def parition(arr):
     return left + right
 
 def samSort(arr):
+    #worst case: O(n)
 
-    #base case
+    #base case list is empty or only has 1 element
     if(len(arr) <= 1 ):
         return arr
-    arr = parition(arr)
+    #if parition
+    if len(arr) >= 10:
+        arr = parition(arr)
     chunk = arr[:2]
     arr = arr[2:]
     #if they're not in order swap them
