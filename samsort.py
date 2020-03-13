@@ -41,8 +41,9 @@ def addToChunk(chunk, value):
 
 def parition(arr):
 
-    #Worst case: 7 log(n) I used a counter and the number of paritions never surpassed 42
-    #when I chose an list size 1 million
+    #Worst case:  I used a counter and the number of paritions for a list of size 1 million never surpassed 42
+    #and 42 = 7 log(n) for that size
+    # so Generally worst case: O( log(n * 10) (log(n)) ) a.k.a (log(n) + 1 ) log(n) so ~ log(n) log(n)
     pivot = arr[len(arr)//2]
     left = []
     right = []
@@ -57,8 +58,8 @@ def parition(arr):
     return left + right
 
 def samSort(arr):
-    #worst case: O(n)
-
+    #worst case: O(n log(n)^2) since were calling parition upto ~ log(n) times then each inseriton is upto log (n)
+    #so that simplifies to n *log(n) + ALpha *log(n), Making this algorithm O(n log (n))
     #base case list is empty or only has 1 element
     if(len(arr) <= 1 ):
         return arr
@@ -80,7 +81,7 @@ def main():
     
 
     #very basic test
-    size = 1000000
+    size = 10000
     #converting them back into lists so I dont have to rewrite a bunch of the code
     #using an np.array() would be alot more efficient than python list
     test = list(np.random.random(size))
