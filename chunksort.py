@@ -2,27 +2,25 @@ from timeit import default_timer as timer
 import numpy as np
 import bisect
 
-def findIndex(arr, value, index):
+def findIndex(arr, value):
     '''
-    left = arr[index - 1] <= value
-    right = arr[index] >= value
-    print(f"{value} belongs at position {index} in {arr}")
-    print(left, right)
-    #edgecase: index's outside range of list
-    if(index >= len(arr)):
-        index = len(arr) - 2
-    #basecase: we've got the right index
-    if(left and right):
-        return index
-    #if left condition is not met we check the left side
-    elif(not left):
-        return findIndex(arr, value, index//2)
-    #if the right condition is not met we check the right
-    elif(not right):
-        return findIndex(arr, value, index//2 + index)
+    low = 0
+    high = len(arr) - 1
+    while(low < high):
+        index = (high + low)//2
+        left = arr[index - 1] <= value
+        right = arr[index] >= value
+        #basecase: we've got the right index
+        if(left and right):
+            return index
+        #if left condition is not met we check the left side
+        elif(not left):
+            high = index
+        #if the right condition is not met we check the right
+        else:
+            low = index
     '''
-    #ran into recursion limit issues with my above method(which shouldnt be happening so while i work on that..)
-    #bisect does what my code will eventually do
+    #bisect is still slightly faster than my function so im using it
     return bisect.bisect(arr, value)
 
 def addToChunk(chunk, value):
@@ -36,10 +34,23 @@ def addToChunk(chunk, value):
         chunk.insert(0, value)
     else:
         #initally check the middle of the list
-        chunk.insert(findIndex(chunk, value, len(chunk)//2), value)
+        chunk.insert(findIndex(chunk, value), value)
 
 
 def chunkSort(arr):
+
+    if len(arr) <= 100:
+        left = []
+        right = []
+        pivot = arr[len(arr)//2]
+        for value in arr:
+            if value <= pivot:
+                left.append(value)
+            else:
+                right.append(value)
+        chunkSort(left)
+        chunkSort(right)
+        return left + right
     #base case
     if(len(arr) <= 1 ):
         return arr
@@ -51,6 +62,7 @@ def chunkSort(arr):
 
     for value in arr:
         addToChunk(chunk, value)
+
     return chunk
 
 def main():
@@ -60,8 +72,7 @@ def main():
     size = 100000
     #converting them back into lists so I dont have to rewrite a bunch of the code
     #using an np.array() would be alot more efficient than python list
-    #test = list(np.random.random(size))
-    test = list(np.random.randint(0, 2**31, size))
+    test = list(np.random.random(size))
     test_two = test.copy()
     #timing pythons .sort method { timsort}
     sort_start = timer()
@@ -79,6 +90,7 @@ def main():
     print("Chunksort took:", chunk_end - chunk_start)
     print("the list.sort method took:", sort_end - sort_start)
     print(f"Chunksort was {diff} times slower for a list of size {size}")
-
+    #to make sure its sorted
+    print(["Did not sort succesfully", "Successfully sorted"][test == test_two])
 if __name__ == "__main__":
     main()
