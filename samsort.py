@@ -58,7 +58,7 @@ def parition(arr):
     return left + right
 
 def samSort(arr):
-    #worst case: O(n log(n)^2) since were calling parition upto ~ log(n) times then each inseriton is upto log (n)
+    #worst case: since were calling parition upto ~ log(n) times then each inseriton is upto log (n)
     #so that simplifies to n *log(n) + ALpha *log(n), Making this algorithm O(n log (n))
     #base case list is empty or only has 1 element
     if(len(arr) <= 1 ):
