@@ -52,7 +52,7 @@ def parition(arr):
         return parition(left) + parition(right)
     return left + right
 
-def chunkSort(arr):
+def samSort(arr):
 
     #base case
     if(len(arr) <= 1 ):
@@ -85,7 +85,7 @@ def main():
     
     #timing samSort
     sam_start = timer() 
-    test = chunkSort(test)
+    test = samSort(test)
     sam_end = timer()
     sam_time = sam_end - sam_start
     sort_time = sort_end - sort_start
