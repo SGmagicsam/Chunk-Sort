@@ -36,24 +36,28 @@ def addToChunk(chunk, value):
         #initally check the middle of the list
         chunk.insert(findIndex(chunk, value), value)
 
+def parition(arr):
+
+
+    pivot = arr[len(arr)//2]
+    left = []
+    right = []
+    for value in arr:
+        if value <= pivot:
+            left.append(value)
+        else:
+            right.append(value)
+    #recursively parition until we reach an empty list on either side
+    if(left and right):
+        return parition(left) + parition(right)
+    return left + right
 
 def chunkSort(arr):
 
-    if len(arr) <= 100:
-        left = []
-        right = []
-        pivot = arr[len(arr)//2]
-        for value in arr:
-            if value <= pivot:
-                left.append(value)
-            else:
-                right.append(value)
-        chunkSort(left)
-        chunkSort(right)
-        return left + right
     #base case
     if(len(arr) <= 1 ):
         return arr
+    arr = parition(arr)
     chunk = arr[:2]
     arr = arr[2:]
     #if they're not in order swap them
@@ -69,7 +73,7 @@ def main():
     
 
     #very basic test
-    size = 100000
+    size = 1000000
     #converting them back into lists so I dont have to rewrite a bunch of the code
     #using an np.array() would be alot more efficient than python list
     test = list(np.random.random(size))
@@ -79,17 +83,19 @@ def main():
     test_two.sort()
     sort_end = timer()
     
-    #timing chunksort
-    chunk_start = timer() 
+    #timing samSort
+    sam_start = timer() 
     test = chunkSort(test)
-    chunk_end = timer()
-    diff = (chunk_end - chunk_start) / (sort_end - sort_start)
+    sam_end = timer()
+    sam_time = sam_end - sam_start
+    sort_time = sort_end - sort_start
+    diff = sam_time / sort_time
 
     
 
-    print("Chunksort took:", chunk_end - chunk_start)
-    print("the list.sort method took:", sort_end - sort_start)
-    print(f"Chunksort was {diff} times slower for a list of size {size}")
+    print("SamSort took:", sam_time)
+    print("the list.sort method took:", sort_time)
+    print(f"SamSort was {diff} times slower for a list of size {size}")
     #to make sure its sorted
     print(["Did not sort succesfully", "Successfully sorted"][test == test_two])
 if __name__ == "__main__":
